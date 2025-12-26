@@ -1,0 +1,32 @@
+.topnav {
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    background: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+
+.iconBtn {
+    width: 56px;
+    height: 56px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.topnavTitle {
+    text-align: center;
+    font-weight: 700;
+}
+
+.topnavRight {
+    padding-right: 14px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+.topnavUser { color: var(--muted); font-size: 13px; }
