@@ -9,7 +9,11 @@
     padding: 20px;
     max-width: 1100px;
     margin: 0 auto;
+    width: 100%;
 }
+
+
+
 
 .card {
     border: 1px solid var(--border);
@@ -27,7 +31,18 @@
 .strong { font-weight: 700; }
 
 .row { display: flex; gap: 10px; align-items: center; }
-.rowBetween { display:flex; justify-content:space-between; align-items:center; gap: 10px; }
+.rowBetween {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+/* NON rendere tutti i muted.small verdi: colora solo "online" da JSX con classe dedicata */
+.statusOnline {
+    color: green;
+}
+
 
 .form { display: grid; gap: 10px; }
 .label { display: grid; gap: 6px; font-size: 14px; }
@@ -67,9 +82,8 @@
     grid-template-columns: 1fr 1fr;
     gap: 14px;
 }
-@media (max-width: 900px) {
-    .grid2 { grid-template-columns: 1fr; }
-}
+
+
 
 .list { display: grid; gap: 10px; }
 .listRow {
@@ -86,11 +100,22 @@
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 12px;
-    height: 55vh;
-    overflow: auto;
-    display: grid;
+
+    /* ✅ niente 55vh fisso */
+    height: auto;
+
+    /* ✅ scroll naturale */
+    overflow-y: auto;
+
+    /* ✅ lista messaggi: colonna */
+    display: flex;
+    flex-direction: column;
     gap: 10px;
+
+    /* ✅ per farlo “usabile” su desktop senza spezzare mobile */
+    max-height: 60vh;
 }
+
 
 .chatMsg {
     border: 1px solid var(--border);
@@ -105,4 +130,33 @@
     grid-template-columns: 1fr auto;
     gap: 10px;
     margin-top: 12px;
+}
+
+/* MOBILE */
+@media (max-width: 200px) {
+    .page {
+        padding: 14px;
+        max-width: 680px;
+        margin: 0 auto;
+    }
+
+    /* header: su mobile deve andare a capo */
+    .rowBetween {
+        flex-wrap: wrap;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 200px) {
+    .chatBox {
+        max-height: calc(100vh - 56px - 220px);
+    }
+}
+@media (max-width: 200px) {
+    .chatForm {
+        position: sticky;
+        bottom: 0;
+        background: #fff;
+        padding-top: 10px;
+    }
 }

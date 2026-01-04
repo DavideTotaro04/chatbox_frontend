@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import * as groupsApi from "../services/groupsApi";
 import "../styles/page.css";
 
 export default function Groups() {
     const { setMyGroups } = useOutletContext();
+
     const [publicGroups, setPublicGroups] = useState([]);
+    const [myGroups, setMyGroupsLocal] = useState([]);
+
     const [name, setName] = useState("");
     const [isPublic, setIsPublic] = useState(true);
     const [err, setErr] = useState("");
@@ -14,16 +17,29 @@ export default function Groups() {
     const load = async () => {
         setErr("");
         setOk("");
+
         const pub = await groupsApi.listPublicGroups();
         setPublicGroups(pub);
+
         const mine = await groupsApi.listMyGroups();
-        setMyGroups(mine);
+        setMyGroupsLocal(mine);   // ✅ per filtrare
+        setMyGroups(mine);        // ✅ per sidebar
     };
 
     useEffect(() => {
         load().catch((e) => setErr(e?.response?.data?.message || "Errore"));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    const myGroupIds = useMemo(
+        () => new Set((myGroups || []).map((g) => String(g._id))),
+        [myGroups]
+    );
+
+    const visiblePublicGroups = useMemo(
+        () => (publicGroups || []).filter((g) => !myGroupIds.has(String(g._id))),
+        [publicGroups, myGroupIds]
+    );
 
     const onCreate = async (e) => {
         e.preventDefault();
@@ -86,12 +102,14 @@ export default function Groups() {
                     {ok ? <div className="ok">{ok}</div> : null}
 
                     <div className="list">
-                        {publicGroups?.length ? (
-                            publicGroups.map((g) => (
+                        {visiblePublicGroups?.length ? (
+                            visiblePublicGroups.map((g) => (
                                 <div key={g._id} className="listRow">
                                     <div>
                                         <div className="strong">{g.name}</div>
-                                        <div className="muted small">{g._id}</div>
+                                        <div className="muted small">
+                                            creato da {g.owner?.username || "sconosciuto"}
+                                        </div>
                                     </div>
                                     <button className="btn btnGhost" onClick={() => onJoin(g._id)}>
                                         Unisciti
@@ -99,7 +117,7 @@ export default function Groups() {
                                 </div>
                             ))
                         ) : (
-                            <div className="muted">Nessun gruppo</div>
+                            <div className="muted">Nessun gruppo pubblico disponibile</div>
                         )}
                     </div>
                 </div>

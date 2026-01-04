@@ -17,6 +17,7 @@ export default function AppLayout() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [myGroups, setMyGroups] = useState([]);
     const [err, setErr] = useState("");
+
     const loc = useLocation();
     const nav = useNavigate();
 
@@ -38,10 +39,13 @@ export default function AppLayout() {
         };
     }, []);
 
-    const onNavigate = (to) => {
-        nav(to);
-        setSidebarOpen(false);
+
+    // ✅ chiudi SEMPRE anche se la route non cambia
+    const onNavigate = (to, options) => {
+        setSidebarOpen(false); // 🔴 chiudi SUBITO
+        nav(to, options);
     };
+
 
     const onLogout = async () => {
         await logout();
@@ -52,7 +56,12 @@ export default function AppLayout() {
         <div className="appShell">
             <TopNav title={title} onToggleSidebar={() => setSidebarOpen((v) => !v)} />
 
-            <div className="appBody">
+            <div className={`appBody ${sidebarOpen ? "sidebarOpen" : "sidebarClosed"}`}>
+
+            {sidebarOpen ? (
+                    <div className="sidebarOverlay" onClick={() => setSidebarOpen(false)} />
+                ) : null}
+
                 <Sidebar
                     open={sidebarOpen}
                     userEmail={user?.email}
@@ -61,7 +70,7 @@ export default function AppLayout() {
                     onLogout={onLogout}
                 />
 
-                <main className="appMain" onClick={() => sidebarOpen && setSidebarOpen(false)}>
+                <main className="appMain">
                     {err ? <div className="errorBanner">{err}</div> : null}
                     <Outlet context={{ myGroups, setMyGroups }} />
                 </main>

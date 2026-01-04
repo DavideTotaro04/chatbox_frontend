@@ -2,6 +2,9 @@ import React, { createContext, useMemo, useState } from "react";
 import * as authApi from "../services/authApi";
 import { setTokens, clearTokens, getTokens } from "../services/tokenStorage";
 import { loadInitialUser } from "./authBootstrap";
+import { refreshSocketAuth } from "../services/socketClient";
+import { disconnectSocket } from "../services/socketClient";
+
 
 const AuthContext = createContext(null);
 export default AuthContext;
@@ -14,6 +17,7 @@ export function AuthProvider({ children }) {
         const data = await authApi.login({ email, password });
         setTokens({ accessToken: data.accessToken, refreshToken: data.refreshToken });
         sessionStorage.setItem("user", JSON.stringify(data.user));
+        refreshSocketAuth(data.accessToken);
         setUser(data.user);
     };
 
@@ -21,6 +25,7 @@ export function AuthProvider({ children }) {
         const data = await authApi.register({ email, password, username });
         setTokens({ accessToken: data.accessToken, refreshToken: data.refreshToken });
         sessionStorage.setItem("user", JSON.stringify(data.user));
+        refreshSocketAuth(data.accessToken);
         setUser(data.user);
     };
 
@@ -36,6 +41,7 @@ export function AuthProvider({ children }) {
 
         clearTokens();
         sessionStorage.removeItem("user");
+        disconnectSocket();
         setUser(null);
     };
 

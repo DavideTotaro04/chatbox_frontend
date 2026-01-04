@@ -1,11 +1,26 @@
+/* Sidebar (DESKTOP + MOBILE) */
 .sidebar {
     border-right: 1px solid var(--border);
     background: #fff;
     padding: 14px;
     min-height: 0;
-    overflow: auto;
+    overflow-y: auto;
+
+    width: 280px;
+    transition: transform 0.2s ease;
+    will-change: transform;
 }
 
+/* Desktop: nascosta se non open */
+.sidebar:not(.open) {
+    transform: translateX(-100%);
+}
+
+.sidebar.open {
+    transform: translateX(0);
+}
+
+/* Sezioni */
 .sidebarSection {
     border: 1px solid var(--border);
     border-radius: 14px;
@@ -15,10 +30,20 @@
     margin-bottom: 12px;
 }
 
-.sidebarLabel { font-size: 12px; color: var(--muted); }
-.sidebarValue { font-size: 13px; }
+.sidebarLabel {
+    font-size: 12px;
+    color: var(--muted);
+}
 
-.sidebarList { display: grid; gap: 8px; }
+.sidebarValue {
+    font-size: 13px;
+}
+
+/* Lista gruppi */
+.sidebarList {
+    display: grid;
+    gap: 8px;
+}
 
 .sidebarItem {
     border: 1px solid var(--border);
@@ -27,21 +52,28 @@
     padding: 10px;
     text-align: left;
     cursor: pointer;
+    font-size: 14px;
 }
-.sidebarItem:hover { border-color: #000; }
 
-/* mobile: sidebar a scomparsa */
-@media (max-width: 900px) {
+.sidebarItem:hover {
+    border-color: #000;
+}
+
+/* MOBILE: sidebar fixed sopra contenuto */
+@media (max-width: 200px) {
     .sidebar {
         position: fixed;
-        left: -320px;
         top: 56px;
-        width: 280px;
+        left: 0;
         height: calc(100vh - 56px);
-        transition: left 0.2s ease;
         z-index: 10;
         box-shadow: var(--shadow);
+
+        /* parte chiusa */
+        transform: translateX(-110%);
     }
-    .sidebar.open { left: 0; }
-    .appBody { grid-template-columns: 1fr; }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
 }

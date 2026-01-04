@@ -15,6 +15,7 @@ export default function Sidebar({ open, userEmail, groups, onNavigate, onLogout 
             <div className="sidebarSection">
                 <div className="sidebarLabel">Gruppi</div>
 
+
                 <div className="sidebarList">
                     {groups?.length ? (
                         groups.map((g) => (
