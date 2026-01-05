@@ -1,9 +1,44 @@
 import { io } from "socket.io-client";
-import { getTokens } from "./tokenStorage";
+import { getTokens, setTokens, clearTokens } from "./tokenStorage";
+import { refresh as refreshApi } from "./authApi";
+
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || "http://localhost:3000";
 
 let socket = null;
+
+let refreshingPromise = null;
+
+async function refreshTokens() {
+    const t = getTokens();
+    const refreshToken = t?.refreshToken;
+    if (!refreshToken) return null;
+
+    if (refreshingPromise) return refreshingPromise;
+
+    refreshingPromise = (async () => {
+        try {
+            const data = await refreshApi({ refreshToken });
+
+            const newAccess = data?.accessToken;
+            const newRefresh = data?.refreshToken || refreshToken;
+
+            if (!newAccess) return null;
+
+            setTokens({ accessToken: newAccess, refreshToken: newRefresh });
+            return { accessToken: newAccess, refreshToken: newRefresh };
+        } catch {
+            // refresh fallito: pulizia tokens
+            clearTokens?.();
+            return null;
+        } finally {
+            refreshingPromise = null;
+        }
+    })();
+
+    return refreshingPromise;
+}
+
 
 function bearer(token) {
     if (!token) return undefined;
@@ -20,6 +55,21 @@ export function createSocket() {
         socket = io(SOCKET_URL, {
             autoConnect: true,
             auth: currentAuth(),
+        });
+
+        socket.on("connect_error", async (err) => {
+            const msg = err?.message || "";
+
+            if (!msg.toLowerCase().includes("auth token invalid")) return;
+
+            const refreshed = await refreshTokens();
+            if (!refreshed?.accessToken) return;
+
+            socket.auth = currentAuth();
+
+            if (!socket.connected && !socket.connecting) {
+                socket.connect();
+            }
         });
     } else {
         // aggiorna auth a ogni chiamata (utile se token cambia)

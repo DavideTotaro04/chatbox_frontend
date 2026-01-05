@@ -1,16 +1,11 @@
-import { clearTokens, getTokens } from "../services/tokenStorage";
+import { getTokens, getUser } from "../services/tokenStorage";
 
 export function loadInitialUser() {
     const t = getTokens();
-    const rawUser = sessionStorage.getItem("user");
+    const user = getUser();
 
-    if (!t?.accessToken || !rawUser) return null;
+    if (!t?.accessToken || !user) return null;
 
-    try {
-        return JSON.parse(rawUser);
-    } catch {
-        clearTokens();
-        sessionStorage.removeItem("user");
-        return null;
-    }
+    // se token o user sono corrotti / incoerenti, pulizia totale
+    return user;
 }

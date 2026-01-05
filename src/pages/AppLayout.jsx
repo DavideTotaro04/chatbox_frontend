@@ -8,7 +8,6 @@ import "../styles/layout.css";
 
 function titleFromPath(pathname) {
     if (pathname.includes("/app/groups")) return "Gruppi";
-    if (pathname.includes("/app/chat")) return "Chat";
     return "Home";
 }
 
@@ -39,13 +38,10 @@ export default function AppLayout() {
         };
     }, []);
 
-
-    // ✅ chiudi SEMPRE anche se la route non cambia
     const onNavigate = (to, options) => {
-        setSidebarOpen(false); // 🔴 chiudi SUBITO
+        setSidebarOpen(false);
         nav(to, options);
     };
-
 
     const onLogout = async () => {
         await logout();

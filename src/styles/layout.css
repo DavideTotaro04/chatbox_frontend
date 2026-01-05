@@ -23,21 +23,30 @@
     display: none;
 }
 
-/* MOBILE */
-@media (max-width: 200px) {
+/* MOBILE + TABLET */
+@media (max-width: 1024px) {
+    /* ✅ su mobile/tablet la pagina deve usare tutta la larghezza */
     .appBody {
         grid-template-columns: 1fr;
     }
 
+    /* ✅ anche se sidebarClosed, su mobile/tablet NON devi creare colonne */
+    .appBody.sidebarClosed {
+        grid-template-columns: 1fr;
+    }
+
+    /* padding un filo più compatto */
     .appMain {
         padding: 12px;
     }
 
+    /* overlay (solo quando lo rendi presente da JSX) */
     .sidebarOverlay {
         display: block;
         position: fixed;
         inset: 56px 0 0 0;
         background: rgba(0, 0, 0, 0.05);
-        z-index: 9;
+        z-index: 900; /* sotto la sidebar (1000) ma sopra contenuto */
     }
 }
+

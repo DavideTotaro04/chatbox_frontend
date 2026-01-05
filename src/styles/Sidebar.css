@@ -59,21 +59,23 @@
     border-color: #000;
 }
 
-/* MOBILE: sidebar fixed sopra contenuto */
-@media (max-width: 200px) {
+/* MOBILE + TABLET: sidebar full-screen quando open */
+@media (max-width: 1024px) {
     .sidebar {
         position: fixed;
         top: 56px;
         left: 0;
-        height: calc(100vh - 56px);
-        z-index: 10;
+        width: 100vw;                 /* ✅ full width */
+        height: calc(100dvh - 56px);  /* ✅ viewport mobile stabile */
+        z-index: 1000;
         box-shadow: var(--shadow);
 
-        /* parte chiusa */
-        transform: translateX(-110%);
+        /* chiusa di default */
+        transform: translateX(-100%);
     }
 
     .sidebar.open {
         transform: translateX(0);
     }
 }
+

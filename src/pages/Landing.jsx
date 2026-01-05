@@ -8,15 +8,16 @@ export default function Landing() {
             <div className="card">
                 <h1 className="h1">ChatBox</h1>
                 <p className="p">
-                    App minimal per messaggi in tempo reale: registrazione/login, gruppi, chat.
+                    Benvenuto in ChatBox, piattaforma di messaggistica istantanea che ti permette di
+                    comunicare facilmente con i tuoi amici e colleghi.
                 </p>
 
                 <div className="row">
                     <Link className="btn btnPrimary" to="/login">
-                        Login
+                        Accedi
                     </Link>
                     <Link className="btn btnGhost" to="/register">
-                        Registrazione
+                        Registrati
                     </Link>
                 </div>
             </div>

@@ -4,9 +4,9 @@
     align-items: center;
     border-bottom: 1px solid var(--border);
     background: #fff;
-    position: sticky;
     top: 0;
     z-index: 5;
+    position: relative;
 }
 
 .iconBtn {
@@ -19,9 +19,14 @@
 }
 
 .topnavTitle {
-    text-align: center;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     font-weight: 700;
+    white-space: nowrap;
+    pointer-events: none; /* evita click fantasma */
 }
+
 
 .topnavRight {
     padding-right: 14px;
@@ -30,3 +35,23 @@
     gap: 10px;
 }
 .topnavUser { color: var(--muted); font-size: 13px; }
+
+@media (max-width: 600px) {
+    .topnav {
+        grid-template-columns: 48px 1fr auto;
+        padding: 0 6px;
+    }
+
+    .iconBtn {
+        width: 48px;
+        height: 48px;
+    }
+
+    .topnavUser { font-size: 20%; }
+
+    .topnavTitle {
+        font-size: 14px;
+        max-width: calc(100% - 48px - 24px);
+    }
+}
+
