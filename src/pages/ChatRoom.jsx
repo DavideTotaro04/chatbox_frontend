@@ -94,7 +94,6 @@ export default function ChatRoom() {
         }
     }, [room]);
 
-
     // carica mio ruolo nel gruppo
     useEffect(() => {
         let alive = true;
@@ -363,13 +362,17 @@ export default function ChatRoom() {
 
     // funzione abbandona gruppo
     const leaveGroup = async () => {
+        const ok = window.confirm("Vuoi davvero abbandonare il gruppo?");
+        if (!ok) return;
+
         try {
-            await groupsApi.leaveGroup(roomId); // chiama API per lasciare il gruppo
+            await groupsApi.leaveGroup(roomId);
             nav("/app/groups");
         } catch {
             console.log("Errore abbandono gruppo");
         }
     };
+
 
 
     // render delle componenti
@@ -383,7 +386,7 @@ export default function ChatRoom() {
                 <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
                     {!selectMode ? (
                         <button
-                            className="btn btnGhost"
+                            className="bottone btnSelezionaMess"
                             type="button"
                             onClick={() => {
                                 // filtra selezionati: tieni solo i miei
@@ -403,10 +406,10 @@ export default function ChatRoom() {
                     ) : (
                         <>
                             <div className="muted small">{selected.size} selezionati </div>
-                            <button className="btn btnGhost" type="button" onClick={deleteSelected}>
+                            <button className="bottone btnEliminaMess" type="button" onClick={deleteSelected}>
                                 Elimina
                             </button>
-                            <button className="btn btnGhost" type="button" onClick={clearSelection}>
+                            <button className="bottone btnAnnulla" type="button" onClick={clearSelection}>
                                 Annulla
                             </button>
                         </>
@@ -414,18 +417,24 @@ export default function ChatRoom() {
 
                     {isOwner ? (
                         <button
-                            className="btn btnGhost"
+                            className="bottone btnEliminaGruppo"
                             type="button"
                             onClick={async () => {
+                                const ok = window.confirm(
+                                    "Sei sicuro di voler eliminare il gruppo?\nTutti i messaggi verranno eliminati."
+                                );
+                                if (!ok) return;
+
                                 await groupsApi.deleteGroup(roomId);
                                 nav("/app/groups");
                             }}
+
                         >
                             Elimina gruppo
                         </button>
                     ) : null}
 
-                    <button className="btn btnGhost" type="button" onClick={leaveGroup}>
+                    <button className="bottone btnAbbandona" type="button" onClick={leaveGroup}>
                         Abbandona
                     </button>
 
@@ -438,7 +447,7 @@ export default function ChatRoom() {
 
             {/* STORICO MESSAGGI */}
             <div className="row" style={{ marginBottom: 10 }}>
-                <button className="btn btnGhost" type="button" onClick={loadOlder} disabled={loadingHistory}>
+                <button className="bottone btnCaricaPrecedenti" type="button" onClick={loadOlder} disabled={loadingHistory}>
                     {loadingHistory ? "Carico..." : "Carica precedenti"}
                 </button>
                 {historyError ? <div className="error">{historyError}</div> : null}
@@ -456,7 +465,7 @@ export default function ChatRoom() {
                         onChange={(e) => setAddEmail(e.target.value)}
                         />
 
-                        <button className="btn btnGhost" type="button" onClick={addMember} disabled={adding}>
+                        <button className="bottone btnAggiungi" type="button" onClick={addMember} disabled={adding}>
                             {adding ? "Aggiungo..." : "Aggiungi"}
                         </button>
                     </div>
@@ -483,7 +492,7 @@ export default function ChatRoom() {
                             ) : null}
 
                             <div className="chatMeta">
-                                <span className="muted small">
+                                <span className="emailUtente small">
                                   {m?.sender?.username || m?.sender?.email || m?.sender?._id || m?.sender || "unknown"}
                                 </span>
 
@@ -509,7 +518,7 @@ export default function ChatRoom() {
                     onChange={(e) => setText(e.target.value)}
                     onFocus={ensureSocketConnected}
                 />
-                <button className="btn btnPrimary" type="submit">
+                <button className="bottone btnInvio" type="submit">
                     Invia
                 </button>
             </form>

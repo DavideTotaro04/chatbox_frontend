@@ -2,7 +2,6 @@ import React from "react";
 import "../styles/TopNav.css";
 import useAuth from "../context/useAuth";
 
-
 export default function TopNav({ title, onToggleSidebar }) {
     const { user } = useAuth();
 

@@ -6,9 +6,11 @@ import useAuth from "../context/useAuth";
 import * as groupsApi from "../services/groupsApi";
 import "../styles/layout.css";
 
+//determina il titolo in base al path
 function titleFromPath(pathname) {
     if (pathname.includes("/app/groups")) return "Gruppi";
-    return "Home";
+    if (pathname.includes("/app/dashboard")) return "Home";
+    return "Chat";
 }
 
 export default function AppLayout() {

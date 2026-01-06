@@ -4,43 +4,49 @@ import * as groupsApi from "../services/groupsApi";
 import "../styles/page.css";
 
 export default function Groups() {
-    const { setMyGroups } = useOutletContext();
+    const { setMyGroups } = useOutletContext(); // per aggiornare i gruppi nella sidebar
 
-    const [publicGroups, setPublicGroups] = useState([]);
-    const [myGroups, setMyGroupsLocal] = useState([]);
+    const [publicGroups, setPublicGroups] = useState([]);   // tutti i gruppi pubblici
+    const [myGroups, setMyGroupsLocal] = useState([]);  // i miei gruppi
 
+    // stati per il form di creazione
     const [name, setName] = useState("");
     const [isPublic, setIsPublic] = useState(true);
     const [err, setErr] = useState("");
     const [ok, setOk] = useState("");
 
+    // funzione per caricare i gruppi
     const load = async () => {
         setErr("");
         setOk("");
 
-        const pub = await groupsApi.listPublicGroups();
+        const pub = await groupsApi.listPublicGroups(); // tutti i gruppi pubblici
         setPublicGroups(pub);
 
-        const mine = await groupsApi.listMyGroups();
-        setMyGroupsLocal(mine);   // ✅ per filtrare
-        setMyGroups(mine);        // ✅ per sidebar
+        const mine = await groupsApi.listMyGroups();        // i miei gruppi
+        setMyGroupsLocal(mine);   // per filtrare
+        setMyGroups(mine);        // per la sidebar
     };
 
+    // carica i gruppi al montaggio
     useEffect(() => {
         load().catch((e) => setErr(e?.response?.data?.message || "Errore"));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    // calcola i gruppi pubblici visibili (escludendo i miei)
     const myGroupIds = useMemo(
         () => new Set((myGroups || []).map((g) => String(g._id))),
         [myGroups]
     );
 
+    // filtra i gruppi pubblici per escludere quelli di cui sono già membro
     const visiblePublicGroups = useMemo(
         () => (publicGroups || []).filter((g) => !myGroupIds.has(String(g._id))),
         [publicGroups, myGroupIds]
     );
 
+    // gestisce la creazione di un gruppo
     const onCreate = async (e) => {
         e.preventDefault();
         setErr("");
@@ -55,6 +61,7 @@ export default function Groups() {
         }
     };
 
+    // gestisce l'iscrizione a un gruppo pubblico
     const onJoin = async (id) => {
         setErr("");
         setOk("");
@@ -89,7 +96,7 @@ export default function Groups() {
                             Pubblico
                         </label>
 
-                        <button className="btn btnPrimary" type="submit">
+                        <button className="bottone btnCreaGruppo" type="submit">
                             Crea
                         </button>
                     </form>
@@ -111,7 +118,7 @@ export default function Groups() {
                                             creato da {g.owner?.username || "sconosciuto"}
                                         </div>
                                     </div>
-                                    <button className="btn btnGhost" onClick={() => onJoin(g._id)}>
+                                    <button className="bottone btnUnisciti" onClick={() => onJoin(g._id)}>
                                         Unisciti
                                     </button>
                                 </div>

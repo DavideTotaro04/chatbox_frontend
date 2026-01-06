@@ -1,18 +1,21 @@
+/* Layout generale dell'applicazione */
 .appShell {
     min-height: 100vh;
 }
 
+/* Corpo principale dell'applicazione */
 .appBody {
     display: grid;
     grid-template-columns: 280px 1fr;
     min-height: calc(100vh - 56px);
 }
 
-/* Desktop: quando sidebar è chiusa non riservare spazio */
+/* stile chiusura navbar */
 .appBody.sidebarClosed {
     grid-template-columns: 0 1fr;
 }
 
+/* Contenuto principale */
 .appMain {
     min-width: 0;
     padding: 16px;
@@ -25,28 +28,25 @@
 
 /* MOBILE + TABLET */
 @media (max-width: 1024px) {
-    /* ✅ su mobile/tablet la pagina deve usare tutta la larghezza */
+
     .appBody {
         grid-template-columns: 1fr;
     }
 
-    /* ✅ anche se sidebarClosed, su mobile/tablet NON devi creare colonne */
     .appBody.sidebarClosed {
         grid-template-columns: 1fr;
     }
 
-    /* padding un filo più compatto */
     .appMain {
         padding: 12px;
     }
 
-    /* overlay (solo quando lo rendi presente da JSX) */
     .sidebarOverlay {
         display: block;
         position: fixed;
         inset: 56px 0 0 0;
         background: rgba(0, 0, 0, 0.05);
-        z-index: 900; /* sotto la sidebar (1000) ma sopra contenuto */
+        z-index: 900;
     }
 }
 

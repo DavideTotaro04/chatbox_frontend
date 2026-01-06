@@ -7,7 +7,7 @@ export default function Sidebar({ open, userEmail, groups, onNavigate, onLogout 
             <div className="sidebarSection">
                 <div className="sidebarLabel">Profilo</div>
                 <div className="sidebarValue">{userEmail}</div>
-                <button className="btn btnGhost" onClick={onLogout}>
+                <button className="bottone btnLogout" onClick={onLogout}>
                     Logout
                 </button>
             </div>
@@ -32,7 +32,7 @@ export default function Sidebar({ open, userEmail, groups, onNavigate, onLogout 
                     )}
                 </div>
 
-                <button className="btn btnPrimary" onClick={() => onNavigate("/app/groups")}>
+                <button className="bottone btnGestisciGruppi" onClick={() => onNavigate("/app/groups")}>
                     Gestisci gruppi
                 </button>
             </div>

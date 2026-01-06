@@ -4,20 +4,23 @@ import useAuth from "../context/useAuth";
 import "../styles/page.css";
 
 export default function Register() {
-    const { register } = useAuth();
-    const nav = useNavigate();
 
+    //dati di registrazione
+    const { register } = useAuth(); // passiamo register da useAuth
+    const nav = useNavigate();  // navigazione dopo registrazione
+    // dati di registrazione
     const [email, setEmail] = useState("");
-    const [username, setUsername] = useState(""); // ✅ nuovo
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [err, setErr] = useState("");
 
+    //funzione di submit (quando tocchi crea account)
     const onSubmit = async (e) => {
         e.preventDefault();
         setErr("");
 
         try {
-            await register({ email, username, password }); // ✅ passa username
+            await register({ email, username, password }); // chiamiamo register
             nav("/app/dashboard");
         } catch (e2) {
             const msg = e2?.response?.data?.message || "Errore registrazione";
@@ -63,12 +66,12 @@ export default function Register() {
 
                     {err ? <div className="error">{err}</div> : null}
 
-                    <button className="btn btnPrimary" type="submit">
+                    <button className="bottone btnCreaAccount" type="submit">
                         Crea account
                     </button>
                 </form>
 
-                <div className="muted">
+                <div className="Login">
                     Hai già un account? <Link to="/login">Login</Link>
                 </div>
             </div>

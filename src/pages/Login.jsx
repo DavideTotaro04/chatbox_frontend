@@ -4,12 +4,15 @@ import useAuth from "../context/useAuth";
 import "../styles/page.css";
 
 export default function Login() {
+
+    //dati di login
     const { login } = useAuth();
     const nav = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [err, setErr] = useState("");
 
+    //funzione di submit (quando tocchi accedi)
     const onSubmit = async (e) => {
         e.preventDefault();
         setErr("");
@@ -45,12 +48,12 @@ export default function Login() {
 
                     {err ? <div className="error">{err}</div> : null}
 
-                    <button className="btn btnPrimary" type="submit">
+                    <button className="bottone btnEntra" type="submit">
                         Entra
                     </button>
                 </form>
 
-                <div className="muted">
+                <div className="Registrati">
                     Non hai un account? <Link to="/register">Registrati</Link>
                 </div>
             </div>

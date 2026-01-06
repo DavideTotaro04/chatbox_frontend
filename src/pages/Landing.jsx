@@ -13,10 +13,10 @@ export default function Landing() {
                 </p>
 
                 <div className="row">
-                    <Link className="btn btnPrimary" to="/login">
+                    <Link className="bottone btnAccedi" to="/login">
                         Accedi
                     </Link>
-                    <Link className="btn btnGhost" to="/register">
+                    <Link className="bottone btnRegistrati" to="/register">
                         Registrati
                     </Link>
                 </div>

@@ -11,27 +11,31 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 export default function App() {
     return (
+        //Definisce le rotte principali dell'applicazione
         <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
 
+            <Route path="/" element={<Landing />} />    {/* Pagina iniziale */}
+            <Route path="/login" element={<Login />} /> {/* login */}
+            <Route path="/register" element={<Register />} />   {/* registrazione */}
+
+            {/* Area protetta dell'app */}
             <Route
                 path="/app"
                 element={
                     <ProtectedRoute>
-                        <AppLayout />
+                        <AppLayout />{/* Layout comune dell’app (TopNav, Sidebar, Outlet) */}
                     </ProtectedRoute>
                 }
             >
-                <Route index element={<Navigate to="dashboard" replace />} />
-                <Route path="dashboard" element={<Dashboard />} />
-                <Route path="groups" element={<Groups />} />
-                <Route path="chat/:roomType/:roomId" element={<ChatRoom />} />
+                <Route index element={<Navigate to="dashboard" replace />} /> {/* /app → reindirizza automaticamente a /app/dashboard */}
+                <Route path="dashboard" element={<Dashboard />} /> {/* Dashboard principale */}
+                <Route path="groups" element={<Groups />} /> {/* Lista gruppi */}
+                <Route path="chat/:roomType/:roomId" element={<ChatRoom />} />{/* Chat di un gruppo o stanza roomType e roomId arrivano dall’URL */}
             </Route>
 
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<Navigate to="/" replace />} /> {/* Qualsiasi rotta non valida → torna alla landing */}
         </Routes>
+
     );
 }
 
