@@ -1,15 +1,15 @@
 import axios from "axios";
 import { getTokens, setTokens, clearTokens } from "./tokenStorage";
 
-/* URL base dell’API (da env o fallback locale) */
+//URL base dell’API (da env o fallback locale)
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
-/* Istanza axios centralizzata */
+// Istanza axios centralizzata
 export const api = axios.create({
     baseURL: API_URL,
 });
 
-// aggiunge token di accesso a ogni richiesta
+// aggiunge token di accesso a ogni richiesta HTTP
 api.interceptors.request.use((config) => {
     const t = getTokens();
     if (t?.accessToken) config.headers.Authorization = `Bearer ${t.accessToken}`;   // aggiunge header di autorizzazione
@@ -25,7 +25,7 @@ api.interceptors.response.use(
         const original = err.config;    // richiesta originale
         const status = err?.response?.status;   // stato della risposta
 
-        if (status !== 401 || original?._retry) throw err;  // /* se non è 401 o è già stato ritentato: propaga errore */
+        if (status !== 401 || original?._retry) throw err;  // se non è 401 o è già stato ritentato: propaga errore
 
         original._retry = true; // evita loop infiniti
 

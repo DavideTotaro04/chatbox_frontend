@@ -46,7 +46,7 @@ export function AuthProvider({ children }) {
         setUserState(null);
     };
 
-    // memoizza il valore del contesto per ottimizzare le prestazioni
+    // memorizza il valore del contesto per ottimizzare le prestazioni
     const value = useMemo(
         () => ({ user, loading, login, register, logout }),
         [user, loading]
